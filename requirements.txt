@@ -1,4 +1,6 @@
 beautifulsoup4
 requests
 gtts
+selenium
+webdriver-manager
 tk
