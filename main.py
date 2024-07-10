@@ -1,10 +1,24 @@
-# main.py
+import subprocess
+import sys
+
+# Function to install packages
+def install_packages():
+    with open('requirements.txt', 'r') as f:
+        packages = f.readlines()
+    for package in packages:
+        package = package.strip()
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+# Ensure all dependencies are installed
+install_packages()
+
+# Import necessary modules
 import tkinter as tk
-from tkinter import ttk, filedialog
-from scraper.py import scrape_fanfiction
-from cleaner.py import clean_text
-from file_manager.py import save_chapter
-from splitter.py import split_into_chapters
+from tkinter import ttk, filedialog, messagebox
+from scraper import scrape_fanfiction
+from cleaner import clean_text
+from file_manager import save_chapter
+from splitter import split_into_chapters
 
 class Fanfiction2AudiobookApp:
     def __init__(self, root):
@@ -51,7 +65,7 @@ class Fanfiction2AudiobookApp:
         title = self.title_entry.get()
         
         if not url or not site or not title or not self.output_dir:
-            tk.messagebox.showerror("Error", "Please fill all fields and select an output directory.")
+            messagebox.showerror("Error", "Please fill all fields and select an output directory.")
             return
         
         story_text = scrape_fanfiction(url, site)
@@ -61,7 +75,7 @@ class Fanfiction2AudiobookApp:
         for i, chapter in enumerate(chapters, start=1):
             save_chapter(chapter, title, i, self.output_dir)
         
-        tk.messagebox.showinfo("Success", "Conversion completed successfully!")
+        messagebox.showinfo("Success", "Conversion completed successfully!")
 
 if __name__ == "__main__":
     root = tk.Tk()
